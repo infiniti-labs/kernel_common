@@ -237,6 +237,20 @@ config UAPI_HEADER_TEST
 	  If you are a developer or tester and want to ensure the exported
 	  headers are self-contained, say Y here. Otherwise, choose N.
 
+config REPORTED_UTS
+	bool "Override userspace kernel identity"
+	default n
+
+config REPORTED_UTS_RELEASE
+	string "Reported kernel release"
+	depends on REPORTED_UTS
+	default ""
+
+config REPORTED_UTS_VERSION
+	string "Reported kernel version without leading #"
+	depends on REPORTED_UTS
+	default ""
+
 config LOCALVERSION
 	string "Local version - append to kernel release"
 	help

@@ -7,13 +7,25 @@
 #include <linux/uts.h>
 #include <linux/utsname.h>
 
+#ifdef CONFIG_REPORTED_UTS
+static_assert(sizeof(CONFIG_REPORTED_UTS_RELEASE) > 1);
+static_assert(sizeof(CONFIG_REPORTED_UTS_VERSION) > 1);
+static_assert(sizeof(CONFIG_REPORTED_UTS_RELEASE) <= __NEW_UTS_LEN + 1);
+static_assert(sizeof("#" CONFIG_REPORTED_UTS_VERSION) <= __NEW_UTS_LEN + 1);
+#endif
+
 struct uts_namespace init_uts_ns = {
 	.ns.count = REFCOUNT_INIT(2),
 	.name = {
 		.sysname	= UTS_SYSNAME,
 		.nodename	= UTS_NODENAME,
+#ifdef CONFIG_REPORTED_UTS
+		.release	= CONFIG_REPORTED_UTS_RELEASE,
+		.version	= "#" CONFIG_REPORTED_UTS_VERSION,
+#else
 		.release	= UTS_RELEASE,
 		.version	= UTS_VERSION,
+#endif
 		.machine	= UTS_MACHINE,
 		.domainname	= UTS_DOMAINNAME,
 	},
